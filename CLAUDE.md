@@ -72,3 +72,9 @@ Treat these as authoritative decisions already made by the Product Owner (each t
 
 Still open per the spec: the exact stdin layout (order/separators of map, start point, and
 commands), and dojo timing/authorship metadata — neither blocks implementation.
+
+## Erreurs récurrentes
+
+Lorsqu’une même erreur se répète deux fois, propose une instruction courte et précise pour l’éviter. Appuie-toi sur les erreurs observées et fais valider cette instruction avant de l’ajouter à CLAUDE.md.
+
+Si une instruction devient obsolète, propose sa correction ou son retrait et attends la validation avant de modifier le fichier.
