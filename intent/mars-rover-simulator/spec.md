@@ -5,7 +5,7 @@ Intention de référence : intent/mars-rover-simulator/intent.md
 ## Périmètre
 
 Le programme couvre l'interprétation d'un déplacement de rover sur une carte à partir :
-- d'un point de départ (x, y) et d'une orientation (N, S, E ou W),
+- d'un point de départ (x, y) et d'une orientation (N, S, E ou O),
 - d'une carte plaçant les obstacles,
 - d'une liste de commandes de déplacement (avancer, tourner à droite, tourner à gauche).
 
@@ -79,7 +79,7 @@ Scénario
 ## Conception proposée
 
 - Application web en JavaScript (stack décidée dans intent.md ; révision du 2026-09-22 remplaçant le CLI Python initialement retenu, voir R-04 et la section Révisions).
-- Le rover est modélisé par un état composé d'une position (x, y) et d'une orientation parmi N, S, E, W.
+- Le rover est modélisé par un état composé d'une position (x, y) et d'une orientation parmi N, S, E, O.
 - La carte est modélisée comme une grille de cases, chacune étant soit praticable soit un obstacle, indépendamment du jeu de symboles utilisé en entrée (🟩/🌳 ou 🟫/🪨) — proposition à valider.
 - Chaque commande de la liste est traitée une à une contre l'état courant du rover et la carte, sans effet de bord entre commandes autre que la mise à jour de cet état — proposition à valider.
 - Choix acceptés par le Product Owner le 2026-09-22 :
@@ -95,7 +95,7 @@ Scénario
 
 ### R-01 — Sens de rotation associé à « droite » / « gauche »
 
-Origine : l'intention indique que le rover « peut tourner de 90 degrés à droite ou à gauche » sans préciser la correspondance avec les orientations N, S, E, W.
+Origine : l'intention indique que le rover « peut tourner de 90 degrés à droite ou à gauche » sans préciser la correspondance avec les orientations N, S, E, O.
 Exigences concernées : EX-02, EX-05.
 Conséquences : sans cette correspondance, l'orientation résultante d'une rotation ne peut pas être vérifiée de façon univoque.
 Décision : rotation à droite = un cran dans le cycle horaire N→E→S→O→N ; rotation à gauche = un cran dans le sens inverse.
@@ -152,6 +152,12 @@ Commande /spec avec argument : `intent/mars-rover/intent.md` (le fichier d'inten
 ### Révisions
 
 Révision du 2026-09-22 : demande du Product Owner (« Mets à jour spec.md et CLAUDE.md pour refléter la webapp JS »), suite à la décision de suivre le changement de stack décrit dans intent.md (application web en JavaScript remplaçant le CLI Python), déjà mise en œuvre en phase Build. Met à jour le Périmètre (retrait de l'exclusion « pas d'interface graphique »), la Conception proposée et R-04 (saisie via un formulaire web plutôt que stdin), ainsi qu'EX-05 en conséquence.
+
+| Chemin | Commit Git de la version utilisée |
+| --- | --- |
+| .claude/skills/spec/SKILL.md | 1187913ef2fbd6b8c7cc7ee4cbcfda196184340e |
+
+Révision du 2026-09-22 : demande du Product Owner (« Corrige aussi l'incohérence O/W »). Uniformise la lettre désignant l'Ouest sur « O », déjà utilisée par R-01 (cycle N→E→S→O→N) et par le code (`src/rover.js`), là où le Périmètre, la Conception proposée et l'origine de R-01 utilisaient encore « W » ; `intent/mars-rover-simulator/intent.md` corrigé de la même façon. Pas de changement de comportement, notation uniquement.
 
 | Chemin | Commit Git de la version utilisée |
 | --- | --- |

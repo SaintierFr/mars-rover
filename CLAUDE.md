@@ -69,7 +69,7 @@ Treat these as authoritative decisions already made by the Product Owner (each t
   design originally proposed in `spec.md`'s Conception section and reservation R-04 — the intent
   was revised to a web app after the spec's initial acceptance, and R-04 was revised accordingly
   on 2026-09-22.
-- Rover state = position `(x, y)` + orientation ∈ `{N, S, E, W}`.
+- Rover state = position `(x, y)` + orientation ∈ `{N, S, E, O}` (Nord/Sud/Est/Ouest).
 - Axes: North = increasing `y`, East = increasing `x`.
 - Commands are a concatenated string of single letters: `A` (advance), `D` (turn right), `G`
   (turn left, "gauche"). Right turns advance one step in `N→E→S→O→N`; left turns step the other

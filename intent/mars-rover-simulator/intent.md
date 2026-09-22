@@ -15,7 +15,7 @@ Une application web, écrite en JavaScript, qui :
 
 ## Contraintes
 - Langage : JavaScript.
-- Le simulateur reçoit un point (x, y), une orientation N, S, E ou W, une carte plaçant les obstacles, et une liste de commandes.
+- Le simulateur reçoit un point (x, y), une orientation N, S, E ou O, une carte plaçant les obstacles, et une liste de commandes.
 - Le rover peut avancer ou tourner de 90 degrés à droite ou à gauche.
 - Le rover reste immobile lorsqu'un obstacle bloque son avancée.
 - La carte peut employer les symboles 🟩 et 🌳, ou les symboles 🟫 et 🪨.
