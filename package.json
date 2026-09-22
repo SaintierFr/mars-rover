@@ -1,0 +1,10 @@
+{
+  "name": "mars-rover-simulator",
+  "version": "0.1.0",
+  "description": "Simulateur de rover martien - dojo SDLC AI-native (Agile en Seine)",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  }
+}
