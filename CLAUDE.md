@@ -5,10 +5,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repository is
 
 This is a coding-dojo project ("Dojo SDLC AI-native — Agile en Seine") for building a Mars Rover
-simulator. The repository currently only contains the **Intent** and **Design (spec)** artifacts
-produced by the SDLC workflow described below — there is no Python implementation yet, and
-therefore no build, lint, or test commands to run. Once implementation code lands, this file
-should be updated with the actual commands.
+simulator. The repository contains the **Intent** and **Design (spec)** artifacts produced by the
+SDLC workflow described below, plus a first **Build**: a JavaScript web application implementing
+the accepted spec.
+
+- Tests: `npm test` (runs `node --test`; no npm dependency needs installing).
+- Running the app: `index.html` loads its logic via ES modules, which browsers block over
+  `file://` — serve the repo root over HTTP first (e.g. `npx serve .` or
+  `python3 -m http.server`), then open the served page. See `README.md`.
+- The Build plan is recorded in `intent/mars-rover-simulator/plan.md`.
 
 ## SDLC workflow: Intent → Spec → Build
 
@@ -42,8 +47,11 @@ open question or a "réserve" (reservation) until a human answers it.
    - Only commits/pushes/opens a PR once the Product Owner explicitly agrees the spec is ready to
      propose, and never merges that PR itself.
 
-3. **Build** — not started in this repository yet. When implementing, no separate skill exists
-   for this phase in this repo; follow the accepted `spec.md` requirements directly.
+3. **Build** — no separate skill exists for this phase in this repo; follow the accepted
+   `spec.md` requirements directly. A plan is written to `plan.md` next to `intent.md`/`spec.md`
+   before implementation starts (see `intent/mars-rover-simulator/plan.md` for the current one).
+   Currently implemented: a JavaScript web app (`index.html` + `src/*.js`, no framework or
+   bundler), with unit tests under `tests/` (`npm test`, using Node's built-in test runner).
 
 When asked to work on intent or spec documents, read `.claude/skills/intent/SKILL.md` or
 `.claude/skills/spec/SKILL.md` in full before acting — they contain the precise rules (question
@@ -55,8 +63,12 @@ The accepted spec (`intent/mars-rover-simulator/spec.md`) currently describes th
 Treat these as authoritative decisions already made by the Product Owner (each traceable to a
 `R-xx` reservation in the spec) rather than open design choices:
 
-- CLI program in Python, reading the map, starting point/orientation, and command string from
-  **stdin** (exact line layout still unspecified — a Build-time detail).
+- Web application in JavaScript (no framework or bundler), receiving the map, starting
+  point/orientation, and command string via an HTML form (exact field layout is a Build-time
+  detail — implemented in `src/parseFormInput.js`). This supersedes the CLI-in-Python/stdin
+  design originally proposed in `spec.md`'s Conception section and reservation R-04 — the intent
+  was revised to a web app after the spec's initial acceptance, and R-04 was revised accordingly
+  on 2026-09-22.
 - Rover state = position `(x, y)` + orientation ∈ `{N, S, E, W}`.
 - Axes: North = increasing `y`, East = increasing `x`.
 - Commands are a concatenated string of single letters: `A` (advance), `D` (turn right), `G`
@@ -70,8 +82,8 @@ Treat these as authoritative decisions already made by the Product Owner (each t
 - Output: a single compact line `x y orientation` (e.g. `2 3 S`) after the whole command string
   has been processed.
 
-Still open per the spec: the exact stdin layout (order/separators of map, start point, and
-commands), and dojo timing/authorship metadata — neither blocks implementation.
+Still open per the spec: the exact form field layout (already fixed in practice by
+`src/parseFormInput.js`), and dojo timing/authorship metadata — neither blocks implementation.
 
 ## Erreurs récurrentes
 

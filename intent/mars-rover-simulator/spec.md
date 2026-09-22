@@ -11,7 +11,7 @@ Le programme couvre l'interprétation d'un déplacement de rover sur une carte �
 
 Il affiche en sortie la position et la direction finales du rover après exécution de la liste de commandes.
 
-Est exclu de ce périmètre tout ce qui dépasse l'exécution d'une simulation unique en ligne de commande (pas d'interface graphique, pas de persistance, pas de mode interactif au-delà de la lecture des entrées).
+Est exclu de ce périmètre tout ce qui dépasse l'exécution d'une simulation unique dans une page web (pas de persistance, pas de mode interactif au-delà de la saisie unique du formulaire).
 
 ## Exigences
 
@@ -59,7 +59,7 @@ Scénario
 ### EX-05 — Exécution séquentielle d'une liste de commandes
 
 Origine dans l'intention : « reçoit un point de départ, une carte et une liste de commandes » et « interprète ces commandes ».
-Comportement attendu : le programme lit la carte, le point de départ, l'orientation initiale et la liste de commandes depuis l'entrée standard (décision du Product Owner du 2026-09-22, voir R-04), puis applique chaque commande de la liste l'une après l'autre à l'état courant du rover (position, orientation), chaque commande étant évaluée indépendamment (y compris le blocage sur obstacle ou sur bord de carte décrit en EX-03).
+Comportement attendu : le programme reçoit la carte, le point de départ, l'orientation initiale et la liste de commandes via un formulaire web (décision initiale du Product Owner du 2026-09-22, révisée le 2026-09-22, voir R-04), puis applique chaque commande de la liste l'une après l'autre à l'état courant du rover (position, orientation), chaque commande étant évaluée indépendamment (y compris le blocage sur obstacle ou sur bord de carte décrit en EX-03).
 
 Scénario
 - Situation de départ : le rover est en position et orientation initiales ; la liste de commandes est la chaîne "AADAG" (A = avancer, D = tourner à droite, G = tourner à gauche ; décision du Product Owner du 2026-09-22, voir R-03).
@@ -78,7 +78,7 @@ Scénario
 
 ## Conception proposée
 
-- Programme en ligne de commande écrit en Python (contrainte acceptée dans l'intention).
+- Application web en JavaScript (stack décidée dans intent.md ; révision du 2026-09-22 remplaçant le CLI Python initialement retenu, voir R-04 et la section Révisions).
 - Le rover est modélisé par un état composé d'une position (x, y) et d'une orientation parmi N, S, E, W.
 - La carte est modélisée comme une grille de cases, chacune étant soit praticable soit un obstacle, indépendamment du jeu de symboles utilisé en entrée (🟩/🌳 ou 🟫/🪨) — proposition à valider.
 - Chaque commande de la liste est traitée une à une contre l'état courant du rover et la carte, sans effet de bord entre commandes autre que la mise à jour de cet état — proposition à valider.
@@ -87,9 +87,9 @@ Scénario
   - Rotation à droite = un cran dans le cycle horaire N→E→S→O→N ; rotation à gauche = un cran dans le sens inverse (R-01).
   - Le bord de la carte se comporte comme un obstacle : une avancée qui sortirait de la carte laisse le rover immobile (anciennement question ouverte de l'intention).
   - Les commandes sont représentées par des lettres simples concaténées en une chaîne : 'A' avancer, 'D' tourner à droite, 'G' tourner à gauche (R-03).
-  - Le programme lit la carte, le point de départ, l'orientation initiale et la liste de commandes depuis l'entrée standard (R-04).
+  - Le programme reçoit la carte, le point de départ, l'orientation initiale et la liste de commandes via un formulaire web (R-04, révisé le 2026-09-22).
   - La sortie est une ligne compacte au format "x y orientation" (anciennement question ouverte de l'intention).
-- Reste à préciser en Build (détail d'implémentation, non bloquant pour la spec) : la disposition exacte des lignes/valeurs attendues sur l'entrée standard (ordre des éléments, séparateurs).
+- Reste à préciser en Build (détail d'implémentation, non bloquant pour la spec) : la disposition exacte des champs du formulaire web (déjà fixée en pratique dans `src/parseFormInput.js` : carte en zone de texte multi-lignes, x/y en champs numériques, orientation en liste déroulante, commandes en champ texte).
 
 ## Réserves
 
@@ -122,12 +122,13 @@ Statut : décidée. Exigence EX-05 mise à jour en conséquence.
 
 ### R-04 — Format d'entrée du point de départ, de la carte et des commandes
 
-Origine : l'intention ne précise pas comment ces éléments sont transmis au programme en ligne de commande (arguments, fichier, entrée standard).
+Origine : l'intention ne précise pas comment ces éléments sont transmis au programme (arguments, fichier, entrée standard, formulaire).
 Exigences concernées : EX-01 à EX-06.
 Conséquences : sans ce format, l'interface du programme ne peut pas être spécifiée précisément.
-Décision : le programme lit la carte, le point de départ, l'orientation initiale et la liste de commandes depuis l'entrée standard (stdin).
-Auteur : Product Owner (via la session /spec). Date : 2026-09-22. Justification : simplicité d'utilisation en ligne de commande pour le dojo, sans gestion de fichiers ou d'arguments multiples.
-Statut : décidée. Exigence EX-05 mise à jour en conséquence. La disposition exacte des éléments sur l'entrée standard reste un détail à préciser en phase Build (non bloquant).
+Décision initiale (2026-09-22) : le programme lit la carte, le point de départ, l'orientation initiale et la liste de commandes depuis l'entrée standard (stdin), pour un programme en ligne de commande en Python.
+Révision (2026-09-22) : suite au changement de stack retenu dans l'intention (application web en JavaScript, remplaçant le CLI Python), ces éléments sont désormais saisis via un formulaire web plutôt que sur l'entrée standard.
+Auteur : Product Owner (décision initiale via la session /spec ; révision confirmée en session de Build). Date de la révision : 2026-09-22. Justification : cohérence avec le changement de stack décidé dans intent.md.
+Statut : décidée (révisée). Exigence EX-05 mise à jour en conséquence. La disposition exacte des champs du formulaire reste un détail à préciser en phase Build (non bloquant), déjà fixée en pratique dans `src/parseFormInput.js`.
 
 ## Questions ouvertes
 
@@ -150,4 +151,8 @@ Commande /spec avec argument : `intent/mars-rover/intent.md` (le fichier d'inten
 
 ### Révisions
 
-Aucune révision à ce stade.
+Révision du 2026-09-22 : demande du Product Owner (« Mets à jour spec.md et CLAUDE.md pour refléter la webapp JS »), suite à la décision de suivre le changement de stack décrit dans intent.md (application web en JavaScript remplaçant le CLI Python), déjà mise en œuvre en phase Build. Met à jour le Périmètre (retrait de l'exclusion « pas d'interface graphique »), la Conception proposée et R-04 (saisie via un formulaire web plutôt que stdin), ainsi qu'EX-05 en conséquence.
+
+| Chemin | Commit Git de la version utilisée |
+| --- | --- |
+| .claude/skills/spec/SKILL.md | 1187913ef2fbd6b8c7cc7ee4cbcfda196184340e |
