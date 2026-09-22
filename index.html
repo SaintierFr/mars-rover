@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulateur Mars Rover</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: system-ui, sans-serif;
+    }
+    body {
+      max-width: 32rem;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+    label {
+      display: grid;
+      gap: 0.25rem;
+      font-weight: 600;
+    }
+    textarea, input, select {
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 0.4rem;
+    }
+    textarea {
+      font-family: monospace;
+      resize: vertical;
+    }
+    .coords {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    button {
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+    #result {
+      font-family: monospace;
+      font-size: 1.2rem;
+    }
+    #errors {
+      color: #b00020;
+    }
+    #errors:empty, #result:empty {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Simulateur Mars Rover</h1>
+
+  <form id="simulation-form">
+    <label>
+      Carte (🟩/🌳 ou 🟫/🪨, une ligne par rangée, première ligne = Nord)
+      <textarea name="map" rows="6" placeholder="🟩🟩🟩🟩🟩&#10;🟩🌳🟩🟩🟩&#10;🟩🟩🟩🟩🟩&#10;🟩🟩🟩🪨🟩&#10;🟩🟩🟩🟩🟩"></textarea>
+    </label>
+
+    <div class="coords">
+      <label>
+        Point de départ x
+        <input name="x" type="number" step="1" value="0" />
+      </label>
+      <label>
+        Point de départ y
+        <input name="y" type="number" step="1" value="0" />
+      </label>
+    </div>
+
+    <label>
+      Orientation de départ
+      <select name="orientation">
+        <option value="N">Nord (N)</option>
+        <option value="E">Est (E)</option>
+        <option value="S">Sud (S)</option>
+        <option value="O">Ouest (O)</option>
+      </select>
+    </label>
+
+    <label>
+      Commandes (A = avancer, D = tourner à droite, G = tourner à gauche)
+      <input name="commands" type="text" placeholder="AADAG" />
+    </label>
+
+    <button type="submit">Simuler</button>
+  </form>
+
+  <p id="errors" role="alert"></p>
+  <p id="result"></p>
+
+  <script type="module" src="src/ui.js"></script>
+</body>
+</html>
